@@ -6,6 +6,13 @@ import time
 files = ['plik1.wav', 'plik2.txt', 'plik3.tif'] # Pliki do szyfrowania
 
 modes = [AES.MODE_ECB, AES.MODE_CBC, AES.MODE_OFB, AES.MODE_CFB, AES.MODE_CTR] # Tryby pracy szyfrów blokowych
+mode_labels = {
+    1: 'ECB',
+    2: 'CBC',
+    3: 'CFB',
+    5: 'OFB',
+    6: 'CTR'
+}
 
 for file in files:
     encrypt_times = {}  # Czasy szyfrowania
@@ -31,16 +38,23 @@ for file in files:
 
             elapsed = stop - start
             if i == 0:
-                encrypt_times[file + str(mode)] = elapsed
+                encrypt_times[file + ',' + mode_labels[mode]] = elapsed
             else:
-                encrypt_times[file + str(mode)] += elapsed
+                encrypt_times[file + ',' + mode_labels[mode]] += elapsed
 
-            cipher = AES.new(key, mode)
+            if mode in (AES.MODE_CBC, AES.MODE_OFB, AES.MODE_CFB):
+                iv = cipher.iv
+                cipher = AES.new(key, mode, iv)
+            elif mode == AES.MODE_CTR:
+                nonce = cipher.nonce
+                cipher = AES.new(key, mode, nonce=nonce)
+            else:
+                cipher = AES.new(key, mode)
 
             # Odliczanie czasu
             start = time.time()
 
-            # Szyfrowanie
+            # Deszyfrowanie
             cipher.decrypt(cryptext)
 
             # Koniec odliczania
@@ -48,9 +62,9 @@ for file in files:
 
             elapsed = stop - start
             if i == 0:
-                decrypt_times[file + str(mode)] = elapsed
+                decrypt_times[file + ',' + mode_labels[mode]] = elapsed
             else:
-                decrypt_times[file + str(mode)] += elapsed
+                decrypt_times[file + ',' + mode_labels[mode]] += elapsed
     print(file, ':')
     print(encrypt_times)
     print(decrypt_times)
