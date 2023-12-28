@@ -1,6 +1,5 @@
 import math
 import secrets
-import sys
 
 
 def main():
@@ -29,8 +28,8 @@ def main():
     d = pow(e, -1, phi)
 
     # Klucze
-    public_key = [e, n]
-    private_key = [d, n]
+    public_key = (e, n)
+    private_key = (d, n)
 
     print(f'Wiadomość:\n{m}\np = {p}\nq = {q}\nn = {n}\nphi = {phi}\ne = {e}\nd = {d}\n')
 
@@ -46,23 +45,18 @@ def main():
 
 
 def encrypt(m, key):
-    ct = []
-    for char in m:
-        c = ord(char) ** key[0]
-        c %= key[1]
-        ct.append(c)
+    e, n = key
+    c = [pow(ord(char), e, n) for char in m]
 
-    return ct
+    return c
 
 
 def decrypt(c, key):
-    msg = ''
-    for char in c:
-        m = char ** key[0]
-        m %= key[1]
-        msg += chr(m)
+    d, n = key
+    s = [chr(pow(char, d, n)) for char in c]
+    m = "".join([str(i) for i in s])
 
-    return msg
+    return m
 
 
 # Sprawdzanie czy liczba jest pierwsza
