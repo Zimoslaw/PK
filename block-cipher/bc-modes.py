@@ -38,9 +38,9 @@ for file in files:
 
             elapsed = stop - start
             if i == 0:
-                encrypt_times[file + ',' + mode_labels[mode]] = elapsed
+                encrypt_times[file + ',' + mode_labels[mode]] = (elapsed*1000) / 10
             else:
-                encrypt_times[file + ',' + mode_labels[mode]] += elapsed
+                encrypt_times[file + ',' + mode_labels[mode]] += (elapsed*1000) / 10
 
             if mode in (AES.MODE_CBC, AES.MODE_OFB, AES.MODE_CFB):
                 iv = cipher.iv
@@ -62,9 +62,9 @@ for file in files:
 
             elapsed = stop - start
             if i == 0:
-                decrypt_times[file + ',' + mode_labels[mode]] = elapsed
+                decrypt_times[file + ',' + mode_labels[mode]] = (elapsed*1000) / 10
             else:
-                decrypt_times[file + ',' + mode_labels[mode]] += elapsed
-    print(file, ':')
+                decrypt_times[file + ',' + mode_labels[mode]] += (elapsed*1000) / 10
+    print(file, '[czasy w ms]:')
     print(encrypt_times)
     print(decrypt_times)

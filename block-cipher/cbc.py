@@ -59,7 +59,7 @@ def cbc_encrypt_block(block, top_register, key):
     # Obiekt szyfrowania ECB
     cipher = AES.new(key, AES.MODE_ECB)
 
-    # XOR IV z pierwszym blokiem
+    # XOR IV z blokiem
     xored = int.from_bytes(top_register, sys.byteorder) ^ int.from_bytes(block, sys.byteorder)
 
     # Szyfrowanie wyniku XOR

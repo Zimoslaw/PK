@@ -22,7 +22,6 @@ def main(argv):
     random_string = bitarray()
 
     # Wartość pierwotna generatora
-    x = rng.randrange(3, N)
     x = N
     while not is_prime(x) or math.gcd(N, x) != 1:
         x = rng.randrange(3, N)
